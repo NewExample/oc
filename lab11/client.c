@@ -29,27 +29,27 @@ void random_digits(int* digits, int size, int mind, int maxd)
 
 int main(int argc, char* argv[])
 {
-    char* args = argv[1];
+    char* args = argv[1];//аргумент командной строки
     char* port = strchr(args, ':');
     size_t pointer = port - args;
     char ip[pointer + 1];
     take_ip(args, ip, pointer);
-    printf("%s:%s\n", ip, port + 1);
+    printf("%s:%s\n", ip, port + 1); // разделение на порт и ip
 
     int size, mind, maxd;
     int digits[size];
     printf("Укажите размер и диапазон (например, 10 1 10): ");
-    scanf("%d %d %d", &size, &mind, &maxd);
-    random_digits(digits, size, mind, maxd);
+    scanf("%d %d %d", &size, &mind, &maxd);// указываем размер массива принимающего минимальный и максимальный порог
+    random_digits(digits, size, mind, maxd);//заполняем массив рандомными числами
     printf("Вами сгенерированы следующие числа: ");
     for (size_t i = 0; i < size; ++i)
     {
-        printf("%d ", digits[i]);
+        printf("%d ", digits[i]); //пишется массив
     }
     printf("\n");
     struct sockaddr_in server_addr, client_addr;
 
-    int sock = socket(PF_INET, SOCK_DGRAM, 0);
+    int sock = socket(PF_INET, SOCK_DGRAM, 0); //сокет создаётся на сервере и на клиента
     if (sock < 0)
     {
         perror("Socket error");
@@ -57,7 +57,7 @@ int main(int argc, char* argv[])
     }
 
     memset(&client_addr, 0, sizeof(client_addr));
-    memset(&server_addr, 0, sizeof(server_addr));
+    memset(&server_addr, 0, sizeof(server_addr));// сбрасываем структуры в 0
 
     client_addr.sin_family = AF_INET;
     client_addr.sin_port = htons(0);
@@ -71,19 +71,19 @@ int main(int argc, char* argv[])
 
     server_addr.sin_family = AF_INET;
     server_addr.sin_port = htons(atoi(port + 1));
-    inet_aton(ip, &server_addr.sin_addr);
+    inet_aton(ip, &server_addr.sin_addr); // переводит ip из текстового вида в нормальный
 
     time_t startTime = time(NULL);
-    int n = sendto(sock, digits, size * sizeof(int), 0, (struct sockaddr *)&server_addr, sizeof(server_addr));
-    recvfrom(sock, digits, size * sizeof(int), 0, (struct sockaddr *)NULL, NULL);
+    int n = sendto(sock, digits, size * sizeof(int), 0, (struct sockaddr *)&server_addr, sizeof(server_addr));// отправляем по нашему сокету массив с размером
+    recvfrom(sock, digits, size * sizeof(int), 0, (struct sockaddr *)NULL, NULL);// отправляем по нашему сокету массив с размером
     time_t endTime = time(NULL);
     printf("Обработанный массив чисел:\n");
     for (size_t i = 0; i < size; ++i)
     {
-        printf("%d ", digits[i]);
+        printf("%d ", digits[i]); //выводим отсортированный масив
     }
     printf("\n");
-    printf("На обработку затрачено %ld времени\n", endTime - startTime);
+    printf("На обработку затрачено %ld времени\n", endTime - startTime);//выводим сколько времени нам потребовалось
     close(sock);
     return 0;
 }
