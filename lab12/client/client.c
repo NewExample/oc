@@ -80,7 +80,7 @@ int main(int argc, char* argv[])
     server_addr.sin_port = htons(atoi(port + 1));
     inet_aton(ip, &server_addr.sin_addr);
 
-    int con = connect(sock, (struct sockaddr *)&server_addr, sizeof(server_addr));
+    int con = connect(sock, (struct sockaddr *)&server_addr, sizeof(server_addr));//присоеденяемся к серверу
     if (con < 0)
     {
         perror("Connect error");
@@ -113,7 +113,7 @@ int main(int argc, char* argv[])
         else
         {
             long fileSize;
-            write(sock, message, strlen(message) + 1);
+            write(sock, message, strlen(message) + 1);//записывает в свой сокет сообщение
             int n = read(sock, &fileSize, sizeof(long));
             if (n == 0)
             {
@@ -127,7 +127,8 @@ int main(int argc, char* argv[])
             }
             else
             {
-                recvFile(sock, message, fileSize);
+                recvFile(sock, message, fileSize);// открывает файл . прочитывает а потом записывает из сокета сообщения в буфер.выводит на экран буфер. закрывает сокет и в
+                                                    // и выводит конечное сообщение
             }
         }
     }
